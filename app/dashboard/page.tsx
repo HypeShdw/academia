@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "../lib/auth-client";
+import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Dumbbell, Activity, User, ArrowRight, ShieldCheck, Flame, ChevronRight } from "lucide-react";
