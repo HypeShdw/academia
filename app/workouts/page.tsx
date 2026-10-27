@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "../../lib/auth-client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createWorkout, getWorkouts, deleteWorkout, updateWorkout } from "./actions";
 import { Dumbbell, Plus, Calendar, AlertCircle, Loader2, Activity, Trash2, Pencil, Check, X } from "lucide-react";
 import { toast } from "sonner";
@@ -112,15 +113,19 @@ export default function WorkoutsPage() {
   if (!session) return null;
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500 p-6 md:p-10">
       
-      {/* Cabeçalho */}
+      {/* Cabeçalho com Logo e Título totalmente clicáveis para o Dashboard */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-extrabold text-zinc-50 tracking-tight flex items-center gap-3">
-          <Activity className="h-8 w-8 text-lime-400" />
-          Gestão de Treinos
-        </h1>
-        <p className="text-zinc-400 text-sm">
+        <Link href="/dashboard" className="inline-flex items-center gap-3 group cursor-pointer w-fit">
+          <div className="h-10 w-10 bg-lime-400/10 border border-lime-400/20 rounded-xl flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+            <Activity className="h-6 w-6 text-lime-400" />
+          </div>
+          <h1 className="text-3xl font-extrabold text-zinc-50 tracking-tight group-hover:text-lime-400 transition-colors duration-300">
+            Gestão de Treinos
+          </h1>
+        </Link>
+        <p className="text-zinc-400 text-sm ml-13">
           Crie, edite, organize e gira as suas fichas de treino.
         </p>
       </div>
