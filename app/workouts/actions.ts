@@ -33,3 +33,35 @@ export async function getWorkouts(userId: string) {
     return [];
   }
 }
+
+// Função para atualizar um treino existente
+export async function updateWorkout(id: string, userId: string, title: string, description: string) {
+  if (!title || !description) {
+    throw new Error("O título e a descrição são obrigatórios.");
+  }
+
+  await prisma.workout.updateMany({
+    where: {
+      id,
+      userId, // Garante segurança: o utilizador só edita o seu próprio treino
+    },
+    data: {
+      title,
+      description,
+    },
+  });
+
+  revalidatePath("/workouts");
+}
+
+// Função para apagar um treino
+export async function deleteWorkout(id: string, userId: string) {
+  await prisma.workout.deleteMany({
+    where: {
+      id,
+      userId, // Garante segurança: o utilizador só apaga o seu próprio treino
+    },
+  });
+
+  revalidatePath("/workouts");
+}
