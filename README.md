@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Academia Elite
+**Nicho:** Gestão de Treinos e Fichas de Exercícios · **Grupo:** Nicho 6
+**Dupla:** Samuel do Carmo (@HypeShdw) · Vitor Aride (@VitorAride)
+**Sistema no ar:** https://academia-smoky-nine.vercel.app
 
-## Getting Started
+## O que o sistema faz
+A **Academia Elite** é uma plataforma SaaS de alta performance desenvolvida para gestão de treinos e fichas de exercícios em ambiente corporativo ou pessoal. O sistema oferece autenticação segura de utilizadores, isolamento de dados por conta, e um CRUD completo para criar, visualizar, atualizar e eliminar rotinas de treino, contando com um design refinado em Dark Mode com acentos em verde-lima (*Bento Box UI*), notificações em tempo real e integração contínua via CI/CD.
 
-First, run the development server:
+## Páginas para testar
+- Pública: /login
+- Protegida (pede login): /dashboard
+- Gestão de Treinos (requer autenticação): /workouts
 
-```bash
+## Banco de dados
+O sistema utiliza PostgreSQL (hospedado na Neon) gerido através do **Prisma ORM**, estruturado com as seguintes entidades principais:
+- **User (Utilizador):** Gerido pelo *Better Auth*, armazena o identificador único (`id`), nome, e-mail e dados de sessão.
+- **Session / Account:** Tabelas auxiliares de autenticação vinculadas ao `User`.
+- **Workout (Treino):** Contém os campos `id`, `title`, `description`, `userId` (chave estrangeira que referencia o utilizador criador) e datas de criação/atualização. Garante que cada utilizador apenas acede, edita ou elimina as suas próprias fichas.
+
+## Como rodar no computador
+1. Clone o repositório:
+   ```bash
+   git clone [https://github.com/HypeShdw/academia.git](https://github.com/HypeShdw/academia.git)
+   cd academia
+Instale as dependências:
+
+Bash
+npm install
+Configure o ficheiro .env.local na raiz com as variáveis de ambiente necessárias (DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL).
+
+Execute as migrações do Prisma e inicie o servidor de desenvolvimento:
+
+Bash
+npx prisma migrate dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Aceda a http://localhost:3000 no seu navegador.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Como usamos a IA
+IA usada: Gemini (Google)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Os 3 pedidos (prompts) que mais ajudaram:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+“Como estruturar o layout e as Server Actions no Next.js App Router para realizar um CRUD completo de treinos associados ao ID do utilizador autenticado?”
 
-## Learn More
+“Como unificar o design system em Dark Mode com acentos em verde-lima utilizando Tailwind CSS, criando cartões em formato Bento Box e eliminando blocos de fundo branco indesejados?”
 
-To learn more about Next.js, take a look at the following resources:
+“Como resolver erros de conflito de branches no Git/GitHub (non-fast-forward) e configurar o fluxo de deploy automático na Vercel?”
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Um erro da IA que percebemos e como corrigimos (arquivo e o que mudou):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+O erro: No ficheiro app/dashboard/page.tsx, a IA sugeriu inicialmente uma importação de Server Actions (./actions) utilizando caminhos relativos incorretos (../lib/auth-client e ./actions), o que provocava um erro de Module not found durante o build de produção na Vercel.
 
-## Deploy on Vercel
+O que mudou: Corrigimos os caminhos de importação para utilizar o alias correto do projeto (@/lib/auth-client) e separamos corretamente as ações de backend para a respetiva pasta de treinos (app/workouts/actions.ts), garantindo a compilação bem-sucedida.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O que aprendemos: Aprendemos a importância de manter a consistência nos caminhos de importação baseados em aliases do Next.js, a gerir conflitos de branches no fluxo de Git colaborativo, e a aplicar Server Actions integradas com ORM (Prisma) e autenticação segura (Better Auth) para construir aplicações web escaláveis e prontas para produção.
